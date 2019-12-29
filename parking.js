@@ -56,7 +56,6 @@ const question2 = () => {
             } else if (options === 2) {
                 await leaveHandles()
             }
-            console.log(`Thank you for your valuable feedback: ${answer}`)
             resolve()
         })
     })
