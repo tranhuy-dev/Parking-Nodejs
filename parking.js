@@ -20,11 +20,19 @@ const mapSlot = (slots) => {
 }
 
 
-const findMinIndex = () => {
-    const arrAvailable = parkingArr.filter((element) => {
+const findMinIndex = (arr) => {
+    const arrAvailable = arr.filter((element) => {
         return element.status === 0
     })
     return arrAvailable[0].index;
+}
+
+const checkIsFullSlot = (arr , index) => {
+   return index === arr.length
+}
+
+const checkIDCard = (arr , idCard) => {
+    return parkingArr.findIndex(o => o.card === idCard)
 }
 
 const question1 = () => {
@@ -44,7 +52,7 @@ const question2 = () => {
         rl.question('Options \n 1. Park \n 2. Leave \n 3. Status \n 4. Exit \n Choose options:', async (answer) => {
             options = parseInt(answer);
             if (options === 1) {
-                if (count === parkingSlot) {
+                if (checkIsFullSlot(parkingArr , count)) {
                     console.log("Sorry, parking lot is full");
                 } else {
                     await parkHandles()
@@ -64,7 +72,7 @@ const question2 = () => {
 const parkHandles = () => {
     return new Promise((resolve, reject) => {
         rl.question('park:', (card) => {
-            const indexAvailable = findMinIndex();
+            const indexAvailable = findMinIndex(parkingArr);
             parkingArr[indexAvailable].status = 1;
             parkingArr[indexAvailable].card = card;
             console.log(`Allocated slot number: ${indexAvailable}`)
@@ -81,7 +89,8 @@ const leaveHandles = () => {
             if (dataCardLeave.length !== 2) {
                 console.log("Wrong format")
             } else {
-                const indexCard = parkingArr.findIndex(o => o.card === dataCardLeave[0]);
+                // const indexCard = parkingArr.findIndex(o => o.card === dataCardLeave[0]);
+                const indexCard = checkIDCard(parkingArr , dataCardLeave[0]);
                 if (indexCard === -1) {
                     console.log(`Registration number ${dataCardLeave[0]} not found`)
                 } else {
@@ -109,3 +118,9 @@ const main = async () => {
 }
 
 main()
+
+module.exports = {
+    findMinIndex: findMinIndex,
+    checkIsFullSlot: checkIsFullSlot,
+    checkIDCard: checkIDCard
+}
