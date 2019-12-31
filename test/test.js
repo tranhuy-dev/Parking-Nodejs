@@ -50,4 +50,16 @@ describe('Parking car unit test', function () {
             assert.equal(parking.checkIDCard(dataParking , 1234), -1);
         });
     });
+
+    describe('Parking price with 2 hours', function () {
+        it('should return 10', function () {
+            assert.equal(parking.parkingPrice(2), 10);
+        });
+    });
+
+    describe('Parking price with 4 hours', function () {
+        it('should return 30', function () {
+            assert.equal(parking.parkingPrice(4), 30);
+        });
+    });
 });

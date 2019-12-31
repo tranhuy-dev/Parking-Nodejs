@@ -27,12 +27,21 @@ const findMinIndex = (arr) => {
     return arrAvailable[0].index;
 }
 
-const checkIsFullSlot = (arr , index) => {
-   return index === arr.length
+const checkIsFullSlot = (arr, index) => {
+    return index === arr.length
 }
 
-const checkIDCard = (arr , idCard) => {
+const checkIDCard = (arr, idCard) => {
     return parkingArr.findIndex(o => o.card === idCard)
+}
+
+const parkingPrice = (hour) => {
+    const dataHours = Math.round(parseInt(hour));
+    let fee = 10;
+    if (dataHours > 2) {
+        fee += (dataHours - 2) * 10
+    }
+    return fee;
 }
 
 const question1 = () => {
@@ -52,7 +61,7 @@ const question2 = () => {
         rl.question('Options \n 1. Park \n 2. Leave \n 3. Status \n 4. Exit \n Choose options:', async (answer) => {
             options = parseInt(answer);
             if (options === 1) {
-                if (checkIsFullSlot(parkingArr , count)) {
+                if (checkIsFullSlot(parkingArr, count)) {
                     console.log("Sorry, parking lot is full");
                 } else {
                     await parkHandles()
@@ -90,17 +99,14 @@ const leaveHandles = () => {
                 console.log("Wrong format")
             } else {
                 // const indexCard = parkingArr.findIndex(o => o.card === dataCardLeave[0]);
-                const indexCard = checkIDCard(parkingArr , dataCardLeave[0]);
+                const indexCard = checkIDCard(parkingArr, dataCardLeave[0]);
                 if (indexCard === -1) {
                     console.log(`Registration number ${dataCardLeave[0]} not found`)
                 } else {
                     parkingArr[indexCard].status = 0;
                     parkingArr[indexCard].card = "";
                     const dataHours = Math.round(parseInt(dataCardLeave[1]));
-                    let fee = 10;
-                    if (dataHours > 2) {
-                        fee += (dataHours - 2) * 10
-                    }
+                    let fee = parkingPrice(dataHours)
                     console.log(`Registration number ${dataCardLeave[0]} with Slot Number ${indexCard} is free with Charge ${fee}`)
                     count--;
                 }
@@ -122,5 +128,6 @@ main()
 module.exports = {
     findMinIndex: findMinIndex,
     checkIsFullSlot: checkIsFullSlot,
-    checkIDCard: checkIDCard
+    checkIDCard: checkIDCard,
+    parkingPrice:parkingPrice
 }
